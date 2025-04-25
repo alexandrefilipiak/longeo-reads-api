@@ -1,0 +1,53 @@
+name: Deploy to Cloud Run
+
+# This is a Github Actions workflow that deploys the API to Cloud Run. You can run it whenever
+# you push the code to Github by adding the revelant branch to to the "branches" list. You
+# can also trigger production deploys by doing a Github release.
+# You'll also need to set the environment variables in the Github secrets.
+# Remember to rename the service from "change-me-api" to your API's name on line 45.
+
+on:
+  release:
+    types: [none] # change this to "published" to turn on auto deployments on releases
+  push:
+    branches:
+      - none # change this to "main", "develop", or whatever you named your git branch to turn on deploys from git push
+
+jobs:
+  deploy:
+    # Operating system to run the job on
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout the repository
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Development environment
+    - name: Authenticate with Google Cloud
+      if: github.event_name == 'push'
+      env:
+        GCLOUD_SERVICE_KEY_DEV: ${{ secrets.GCLOUD_SERVICE_KEY_DEV }}
+      run: |
+        echo $GCLOUD_SERVICE_KEY_DEV | base64 --decode > $HOME/gcloud-key.json
+        gcloud auth activate-service-account --key-file=$HOME/gcloud-key.json
+        gcloud config set project ${{ secrets.GCLOUD_PROJECT_DEV }}
+
+    # Production environment (triggered by doing a Github release)
+    - name: Authenticate with Google Cloud
+      if: github.event_name == 'release'
+      env:
+        GCLOUD_SERVICE_KEY_PROD: ${{ secrets.GCLOUD_SERVICE_KEY_PROD }}
+      run: |
+        echo $GCLOUD_SERVICE_KEY_PROD | base64 --decode > $HOME/gcloud-key.json
+        gcloud auth activate-service-account --key-file=$HOME/gcloud-key.json
+        gcloud config set project ${{ secrets.GCLOUD_PROJECT_PROD }}
+
+    # Deploy (remember to set the service name and region
+    - name: Deploy to Cloud Run
+      run: |
+        gcloud run deploy change-me-api \
+          --source . \
+          --region us-central1 \
+          --platform managed \
+          --allow-unauthenticated

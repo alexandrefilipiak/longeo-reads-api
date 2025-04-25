@@ -1,0 +1,61 @@
+
+{
+  "title": "Your App Title",
+
+  "models": [
+    {
+      "display_name": "Notifications",
+      "collection_name": "notifications",
+      "label": {
+        "fieldName": "created_at",
+        "type": "Date"
+      },
+      "sublabel": {
+        "fieldName": "notification",
+        "type": "Raw"
+      },
+      "fields": [
+        {
+          "fieldName": "created_at",
+          "type": "String"
+        },
+        {
+          "fieldName": "notification",
+          "type": "Raw"
+        }
+      ]
+    },
+    {
+      "display_name": "Users",
+      "collection_name": "users",
+      "label": {
+        "fieldName": "display_name",
+        "type": "String"
+      },
+      "sublabel": {
+        "fieldName": "email",
+        "type": "String"
+      },
+      "fields": [
+        {
+          "fieldName": "email",
+          "type": "String"
+        },
+        {
+          "fieldName": "display_name",
+          "type": "String"
+        }
+
+      ]
+    }
+  ],
+
+  "firebase_config":  {
+    "apiKey": "",
+    "authDomain": "",
+    "projectId": "",
+    "storageBucket": "",
+    "messagingSenderId": "",
+    "appId": ""
+  }
+}

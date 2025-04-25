@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "starterkit"
+version = "0.1.0"
+description = ""
+authors = []
+readme = "README.md"
+package-mode = false
+
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.13"
+python-dateutil = "^2.9.0.post0"
+pyflutterflow = "^0.5.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+filterwarnings = [
+  "ignore:`general_plain_validator_function`:DeprecationWarning::",
+  "ignore:pkg_resources is deprecated as an API:DeprecationWarning",
+  "ignore::DeprecationWarning:httpx",
+  "ignore:The event_loop fixture provided by pytest-asyncio has been redefined:DeprecationWarning"
+]
