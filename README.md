@@ -3,8 +3,8 @@
 This is the repository of the [FlutterFlow Starter Kit](https://kealy.studio/flutterflow)'s Python API. The API serves many purposes in supporting a FlutterFlow project, such as
 
 Endpoints for sending push notifications and displaying notifications histories
+Creating and setting admin roles to users
 
-- Creating and setting admin roles to users
 - Sending email, including onboarding emails
 - Interacting with Supabase, including token minting
 - Interacting with Firebase, including Auth token decoding, custom claims setup, and Firestore interactions
