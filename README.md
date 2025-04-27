@@ -2,21 +2,21 @@
 
 This is the repository of the [FlutterFlow Starter Kit](https://kealy.studio/flutterflow)'s Python API. The API serves many purposes in supporting a FlutterFlow project, such as
 
-- Endpoints for sending push notifications and displaying notifications histories
+Endpoints for sending push notifications and displaying notifications histories
+
 - Creating and setting admin roles to users
 - Sending email, including onboarding emails
 - Interacting with Supabase, including token minting
 - Interacting with Firebase, including Auth token decoding, custom claims setup, and Firestore interactions
 - A configurable admin dashboard frontend, delivered statically as part of the API
 - A framework for creating custom logic. Anything you can do in Python,
-you can make available to your app.
+  you can make available to your app.
 - Pages for App store requirements such as support pages, terms of service, privacy policies, and data deletion requests.
 - Media uploads with Cloudinary
 - A full unit testing suite
 - CI/CD workflows for deployments and database backups
 
 You can work on the API locally alongside a local Supabase instance, and deploy the API to GCP whenever you're ready.
-
 
 ## Initial setup
 
@@ -26,7 +26,6 @@ and altering some of the basic settings in `settings.py`.
 It's recommended to then start version controlling the project
 using git from the very beginning (`git init`), and learning some
 basic git workflows to keep your code stable.
-
 
 ## Create a `.env.local` file
 
@@ -39,7 +38,6 @@ as the starting point, and rename it to `.env.local`. This rename will
 prevent the file being checked into version control, which is very important
 for security, so make sure to rename it.
 
-
 ## Directory structure
 
 Inside of the `app/` directory you'll find the API itself. The entry point is `main.py`,
@@ -48,7 +46,6 @@ and from this module the API will initialize itself and mount all the other comp
 `settings.py` is essential to this process, this is where the settings are applied
 that pertain to your app. Most of the settings here will be set from environment variables you define in `.env.local`, but it's
 good to know where these environment variables are injected. You may also add your own settings in this file too.
-
 
 ### The `models/` directory
 
@@ -63,7 +60,6 @@ added the code for initializing Firebase. This is invoked in `main.py`, and it's
 to rely on the environment in which the code is being run to provide the Firebase credentials. You can
 learn how set up the Firebase credentials [here](https://kealy.studio/starterkit-docs/#pythonAPI).
 
-
 ### The `routers` directory
 
 Routers (also called Views) are the entry point for API requests. You can define HTTP REST endpoints
@@ -72,22 +68,24 @@ not to shove all your business logic or database interactions into views, instea
 
 I've set an `admin` and a `user` directory here – these are not essential – it's just one way
 to separate out endpoints with different levels of privilege. You'll find auth guards like
+
 ```python
 Depends(get_admin_user)
 ```
+
 and
+
 ```python
 Depends(get_current_user)
 ```
-here, and these are for decoding the Firebase JWT token and authorizing the user. They're  important for security, so be sure you understand their purpose and how they work.
 
+here, and these are for decoding the Firebase JWT token and authorizing the user. They're important for security, so be sure you understand their purpose and how they work.
 
 ### The `services/` directory
 
 Most of your business logic and error handing should happen in this folder, and this
 is also where you'll call the model layer and database layers. This is where the "core"
 magic of what your application does should be handled.
-
 
 ## Testing
 
@@ -98,15 +96,15 @@ development in general. Spin up a local Supabase environment using
 and use the Pytest option in the vscode debugger to run the tests.
 
 You'll need to set the environment variables in `.env.local`as something like:
+
 ```bash
 SUPABASE_URL=http://127.0.0.1:54321
 SUPABASE_ANON_KEY=ey-get-this-key-from-supabase-status
 SUPABASE_SECRET_KEY=ey-get-this-key-from-supabase-status
 SUPABASE_JWT_SECRET=your-super-secret-jwt-token-with-at-least-32-characters-long
 ```
+
 where the values can be found by running the `supabase status` command (after setting up the local instance using the Supabase CLI).
-
-
 
 ## Deployment
 
@@ -116,7 +114,6 @@ AWS EC2, Railway... you get the picture.
 
 My preference is Google Cloud Run, because you already have a GCP project
 (your Firebase project) that you have to maintain anyway.
-
 
 ### Deployment to Google Cloud Run
 
@@ -130,7 +127,6 @@ Artifacts Registry. Luckily, we don't need to care too much about this
 as Google will build and store the images for us, but it's important to know
 that Google is storing these images because sometimes old images will need
 to be deleted to prevent exceeding the free tier.
-
 
 #### Initial API deploy
 
@@ -166,7 +162,6 @@ PROJECT_NUMBER=`gcloud projects describe $(gcloud config get-value project) --fo
 gcloud run deploy $SERVICE_NAME --source . --region=$REGION --platform=managed --allow-unauthenticated --service-account="$PROJECT_NUMBER-compute@developer.gserviceaccount.com" --env-vars-file $ENV_FILE
 ```
 
-
 #### Automated API deployments
 
 Github is a very well known platform for storing code under version control. It's recommended to use `git`
@@ -179,6 +174,7 @@ in the Github dashboard under Settings > Secrets & Variables > Actions.
 
 First, you need to set GCLOUD_SERVICE_KEY_DEV and GCLOUD_SERVICE_KEY_PROD, one for development and one for production.
 Run these commands to get it. It's base64 encoded to make it more portable.
+
 ```bash
 # Create a credentials keyfile for the service account that will be in charge of deployments
 gcloud iam service-accounts keys create keyfile.json --iam-account=$PROJECT_NUMBER-compute@developer.gserviceaccount.com
@@ -189,6 +185,7 @@ cat keyfile.json | base64 -w 0
 
 After doing the above, DELETE THE KEYFILE or at least keep it somewhere safe elsewhere. DO NOT ACCIDENTALLY ADD IT TO THE
 REPOSITORY OR COMMIT IT TO GIT.
+
 ```bash
 rm keyfile.json
 ```
